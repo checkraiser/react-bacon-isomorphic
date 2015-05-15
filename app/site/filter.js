@@ -10,7 +10,7 @@ module.exports = {
   },
 
   reset: function(newFilter) {
-    window.location.hash = newFilter
+    history.pushState({}, '', '/' + newFilter)
     d.push('reset', newFilter)
   }
 }

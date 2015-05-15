@@ -6,6 +6,7 @@ const express     = require('express'),
       React       = require('react'),
       pmongo      = require('promised-mongo'),
       TodoApp     = require('./site/todoApp'),
+      appState    = require('./site/appState'),
       app         = express()
 
 const items = pmongo('react-bacon-isomorphic').collection('items')
@@ -14,14 +15,18 @@ const _index = fs.readFileSync(resolve(__dirname, '../index.html')).toString()
 
 app.use(bodyParser.json())
 app.use('/public', serveStatic(resolve(__dirname, '../public')))
-app.get('/', (req, res) => {
+app.get('/:filter?', (req, res) => {
+  const filter = req.params.filter || 'all'
   findAllItems()
     .then((items) => {
-      const model = {items}
-      res.set('Content-Type', 'text/html')
-      res.send(_index
-        .replace('{{APP}}', React.renderToString(<TodoApp {...model} />))
-        .replace('{{INITIAL_MODEL}}', JSON.stringify(model)))
+      appState({items, filter})
+        .take(1)
+        .onValue((model) => {
+          res.set('Content-Type', 'text/html')
+          res.send(_index
+            .replace('{{APP}}', React.renderToString(<TodoApp {...model} />))
+            .replace('{{INITIAL_MODEL}}', JSON.stringify(model)))
+        })
     })
     .done()
 })
