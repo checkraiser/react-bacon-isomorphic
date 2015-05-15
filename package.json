@@ -15,6 +15,7 @@
     "baconjs": "0.7.53",
     "body-parser": "1.12.4",
     "express": "^4.12.3",
+    "qwest": "^1.5.12",
     "ramda": "^0.13.0",
     "react": "0.13.2",
     "serve-static": "1.9.3",
