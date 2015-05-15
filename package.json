@@ -1,16 +1,19 @@
 {
-  "name": "react-bacon-todomvc",
+  "name": "react-bacon-isomorphic",
   "version": "0.0.1",
   "author": "Matti Lankinen <m.lankinen@iki.fi>",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "bundle": "browserify src/app.js --extension .jsx -t babelify > build/bundle.js",
-    "watch": "watchify src/app.js -v --extension .jsx -t babelify -o build/bundle.js"
+    "bundle": "browserify app/site/app.js --extension .jsx -t babelify > build/bundle.js",
+    "watch": "npm run watch:js & npm run watch:server & wait",
+    "watch:server": "nodemon --watch app app.js",
+    "watch:js": "watchify app/site/app.js -v --extension .jsx -t babelify -o build/bundle.js"
   },
   "dependencies": {
     "babel": "5.2.15",
     "baconjs": "0.7.53",
+    "express": "^4.12.3",
     "ramda": "^0.13.0",
     "react": "0.13.2",
     "todomvc-app-css": "1.0.0",
