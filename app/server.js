@@ -31,15 +31,17 @@ app.post('/api/items', (req, res) => {
 })
 
 app.put('/api/items/:id/state', (req, res) => {
-  itemsOp(res, items.update({_id: pmongo.ObjectId(req.params.id)}, {$addToSet: {states: req.body.state}}))
+  const q = req.params.id === 'all' ? {} : {_id: pmongo.ObjectId(req.params.id)}
+  itemsOp(res, items.update(q, {$addToSet: {states: req.body.state}}, {multi: true}))
 })
 
 app.put('/api/items/:id/title', (req, res) => {
   itemsOp(res, items.update({_id: pmongo.ObjectId(req.params.id)}, {$set: {title: req.body.title}}))
 })
 
-app.delete('/api/items/:id/state', (req, res) => {
-  itemsOp(res, items.update({_id: pmongo.ObjectId(req.params.id)}, {$pull: {states: req.body.state}}))
+app.delete('/api/items/:id/state/:state', (req, res) => {
+  const q = req.params.id === 'all' ? {} : {_id: pmongo.ObjectId(req.params.id)}
+  itemsOp(res, items.update(q, {$pull: {states: req.params.state}}, {multi: true}))
 })
 
 app.delete('/api/items/completed', (req, res) => {
