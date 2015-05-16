@@ -5,10 +5,8 @@ const React   = require('react'),
       filter  = require('./filter'),
       loader  = require('./loader')
 
-
-
-module.exports = function(initialState) {
-  const filterP  = filter.toProperty(initialState.filter || 'all'),
+module.exports = function({initialState, pathS}) {
+  const filterP  = filter.toProperty(initialState.filter, pathS || Bacon.never()),
         itemsP   = todos.toItemsProperty(initialState.items, filterP),
         loadingP = loader.toProperty()
 

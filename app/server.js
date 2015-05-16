@@ -16,10 +16,10 @@ const _index = fs.readFileSync(resolve(__dirname, '../index.html')).toString()
 app.use(bodyParser.json())
 app.use('/public', serveStatic(resolve(__dirname, '../public')))
 app.get('/:filter?', (req, res) => {
-  const filter = req.params.filter || 'all'
+  const filter = req.params.filter
   findAllItems()
     .then((items) => {
-      appState({items, filter})
+      appState({initialState: {items, filter}})
         .take(1)
         .onValue((model) => {
           res.set('Content-Type', 'text/html')

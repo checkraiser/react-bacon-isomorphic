@@ -4,6 +4,7 @@ const Bacon       = require('baconjs'),
       Dispatcher  = require('./dispatcher'),
       loader      = require('./loader')
 
+// using function because qwest depends on "window"
 const qwest = () => require('qwest')
 
 const d = new Dispatcher()

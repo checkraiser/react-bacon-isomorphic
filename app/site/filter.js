@@ -5,8 +5,11 @@ const Bacon      = require('baconjs'),
 const d = new Dispatcher()
 
 module.exports = {
-  toProperty: function(initialFilter) {
-    return d.stream('reset').scan(initialFilter, (_, newFilter) => newFilter)
+  toProperty: function(initialFilter, pathS) {
+    return d
+      .stream('reset')
+      .merge(pathS.map(path => path.substring(1)))
+      .scan(initialFilter || 'all', (_, newFilter) => newFilter || 'all')
   },
 
   reset: function(newFilter) {
