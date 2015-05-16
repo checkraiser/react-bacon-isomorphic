@@ -16,9 +16,10 @@ module.exports = React.createClass({
           type="checkbox"
           checked={allCompleted}
           onChange={e => todos.setAllCompleted(e.target.checked)}
+          disabled={this.props.loading}
           />
         <ul id="todo-list">
-          {R.map(it => it.display ? <TodoItem key={it.id} item={it} /> : '', this.props.items)}
+          {R.map(it => it.display ? <TodoItem key={it.id} item={it} loading={this.props.loading} /> : '', this.props.items)}
         </ul>
       </section>
     )
