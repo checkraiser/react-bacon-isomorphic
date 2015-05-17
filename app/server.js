@@ -5,8 +5,8 @@ const express     = require('express'),
       bodyParser  = require('body-parser'),
       React       = require('react'),
       pmongo      = require('promised-mongo'),
-      TodoApp     = require('./site/todoApp'),
-      appState    = require('./site/appState'),
+      TodoApp     = require('./client/todoApp'),
+      appState    = require('./client/appState'),
       app         = express()
 
 const items = pmongo('react-bacon-isomorphic').collection('items')

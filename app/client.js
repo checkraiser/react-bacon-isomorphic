@@ -1,8 +1,8 @@
 
 const React    = require('react'),
       Bacon    = require('baconjs'),
-      appState = require('./appState'),
-      TodoApp  = require('./todoApp')
+      appState = require('./client/appState'),
+      TodoApp  = require('./client/todoApp')
 
 const pathStream = Bacon.fromBinder((sink) => {
   window.onpopstate = () => sink(location.pathname)
