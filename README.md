@@ -1,4 +1,4 @@
-# React+Bacon.js isomorphic app template
+# React+Bacon.js isomorphic TodoMVC
 
 ## Motivation
 
@@ -22,6 +22,7 @@ So in order to create isomorphic apps, just remember:
 * Eliminate browser/Node specific dependencies from your isomorphic modules
 * DRY!
 
+For more information, read [my blog post](https://medium.com/@milankinen/isomorphic-apps-normal-react-frp-apps-63a2177f7eac).
 
 ## Playing with the project
 
