@@ -6,10 +6,6 @@ const React = require('react'),
 module.exports = React.createClass({
 
   startEditing: function() {
-    if (this.props.loading) {
-      return
-    }
-
     const node = React.findDOMNode(this.refs.editField),
           item = this.props.item
 
@@ -47,12 +43,11 @@ module.exports = React.createClass({
             type="checkbox"
             onChange={e => todos.setCompleted(item.id, e.target.checked)}
             checked={todos.isCompleted(item)}
-            disabled={this.props.loading}
             />
           <label onDoubleClick={this.startEditing}>
             {item.title}
           </label>
-          <button className="destroy" onClick={() => { if (!this.props.loading) todos.removeItem(item.id) }}/>
+          <button className="destroy" onClick={() => todos.removeItem(item.id) }/>
         </div>
         <input
           ref="editField"
@@ -61,7 +56,6 @@ module.exports = React.createClass({
           onBlur={this.stopEditing}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
-          disabled={this.props.loading}
           />
       </li>
     )

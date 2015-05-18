@@ -34,10 +34,9 @@ module.exports = React.createClass({
             value={this.state.text}
             onChange={this.handleTextChange}
             onKeyDown={this.handleKeyDown}
-            disabled={this.props.loading}
             />
         </header>
-        <TodoList items={this.props.items} loading={this.props.loading} />
+        <TodoList items={this.props.items} />
         <TodoFooter items={this.props.items} filter={this.props.filter} />
       </div>
     )
