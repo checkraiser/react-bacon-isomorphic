@@ -1,14 +1,19 @@
 
 const Bacon       = require('baconjs'),
-  R           = require('ramda'),
-  Dispatcher  = require('./dispatcher')
+      R           = require('ramda'),
+      Dispatcher  = require('./dispatcher'),
+      loader      = require('./loader')
 
+// using function because qwest depends on "window"
+const qwest = () => require('qwest')
 
 const d = new Dispatcher()
 
 module.exports = {
   toItemsProperty: function(initialItems, filterS) {
+
     const itemsS = Bacon.update(initialItems,
+      [d.stream('update:server')],    updateItemsFromServer,
       [d.stream('remove')],           removeItem,
       [d.stream('create')],           createItem,
       [d.stream('addState')],         addItemState,
@@ -20,28 +25,46 @@ module.exports = {
     return Bacon.combineAsArray([itemsS, filterS]).map(withDisplayStatus)
 
 
+    function updateItemsFromServer(_, itemsFromServer) {
+      loader.loading(false)
+      return itemsFromServer
+    }
+
     function createItem(items, newItemTitle) {
-      return items.concat([{id: Date.now(), title: newItemTitle, states: []}])
+      loader.loading(true)
+      d.plug('update:server', Bacon.fromPromise(qwest().post('/api/items',
+        {title: newItemTitle, states: []}, {dataType: 'json'})))
+      return items
     }
 
     function removeItem(items, itemIdToRemove) {
-      return R.reject(it => it.id === itemIdToRemove, items)
+      loader.loading(true)
+      d.plug('update:server', Bacon.fromPromise(qwest().delete('/api/items/' + itemIdToRemove)))
+      return items
     }
 
     function removeCompleteItems(items) {
-      return R.reject(isItemCompleted, items)
+      loader.loading(true)
+      d.plug('update:server', Bacon.fromPromise(qwest().delete('/api/items/completed')))
+      return items
     }
 
     function addItemState(items, {itemId, state}) {
-      return R.map(updateItem(itemId, it => R.merge(it, {states: R.union(it.states, [state])})), items)
+      loader.loading(true)
+      d.plug('update:server', Bacon.fromPromise(qwest().put('/api/items/' + itemId + '/state',
+        {state}, {dataType: 'json'})))
+      return items
     }
 
     function removeItemState(items, {itemId, state}) {
-      return R.map(updateItem(itemId, it => R.merge(it, {states: R.reject(R.eq(state), it.states)})), items)
+      loader.loading(true)
+      d.plug('update:server', Bacon.fromPromise(qwest().delete('/api/items/' + itemId + '/state/' + state)))
+      return items
     }
 
     function updateItemTitle(items, {itemId, title}) {
-      return R.map(updateItem(itemId, it => R.merge(it, {title})), items)
+      qwest().put('/api/items/' + itemId + '/title', {title}, {dataType: 'json'})
+      return items
     }
 
     function withDisplayStatus([items, filter]) {

@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "start": "node app.js",
     "bundle": "browserify app/client.js --extension .jsx -t babelify > public/bundle.js",
     "watch": "npm run watch:js & npm run watch:server & wait",
     "watch:server": "nodemon --watch app app.js",
@@ -13,7 +14,9 @@
   "dependencies": {
     "babel": "5.2.15",
     "baconjs": "0.7.53",
+    "body-parser": "1.12.4",
     "express": "^4.12.3",
+    "qwest": "^1.5.12",
     "ramda": "^0.13.0",
     "react": "0.13.2",
     "serve-static": "1.9.3",
@@ -26,6 +29,8 @@
   "devDependencies": {
     "babelify": "6.0.2",
     "browserify": "10.1.0",
+    "less": "2.5.0",
+    "promised-mongo": "^0.11.1",
     "watchify": "3.2.1"
   }
 }
